@@ -11,6 +11,3 @@ export const store = createStore(
   rootReducer,
   composeWithDevTools(applyMiddleware(logger))
 );
-
-// Temporary dispatch for testing:
-store.dispatch({ type: "TEST_ACTION" });
