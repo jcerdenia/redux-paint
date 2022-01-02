@@ -1,7 +1,8 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { currentStrokeSelector } from "./selectors";
 import { beginStroke, endStroke, updateStroke } from "./actions";
+import { drawStroke } from "./canvasUtils";
 import "./App.css";
 
 function App() {
@@ -32,6 +33,22 @@ function App() {
       dispatch(endStroke);
     }
   };
+
+  const getCanvasWithContext = (canvas = canvasRef.current) => {
+    return { canvas, context: canvas?.getContext("2d") };
+  };
+
+  useEffect(() => {
+    const { context } = getCanvasWithContext();
+
+    if (!context) {
+      return;
+    }
+
+    requestAnimationFrame(() =>
+      drawStroke(context, currentStroke.points, currentStroke.color)
+    );
+  }, [currentStroke]);
 
   return (
     <canvas
